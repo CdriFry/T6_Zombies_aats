@@ -373,6 +373,9 @@ pick_ammo(name, player)
 	}
 	aat = randomIntRange(0,8);
 
+	if(aat ==0||aat ==8){
+		aat=randomIntRange(1,7);
+	}
 	/*
 	aats = array("Blast Furnace", "Fireworks", "Explosive", "Headcutter", "Cluster", "Turned", "Thunder Wall");
 	randomize = array_randomize(aats);
@@ -394,6 +397,8 @@ pick_ammo(name, player)
 	player.last_aat = aat;
 	player.weaponname = name;
 	player.aat_hud destroy();
+
+	wait .5;
 
 	if(aat == 1)
 	{
@@ -464,12 +469,12 @@ pick_ammo(name, player)
     if(aat == 7)
 	{
 		player aat_hud("Thunder Wall", (0,1,1));
-		player.has_fireworks = 0;
+		player.has_fireworks = 1;
 		player.has_blast_furnace = 0;
-		player.has_explosive_bullets = 0;
+		player.has_explosive_bullets = 1;
         player.has_thunder_wall = 1;
         player.has_Headcutter = 0;
-        player.has_cluster = 0;
+        player.has_cluster = 1;
 		player.has_turned = 0;
 	}
 	player thread monitor_aat_weapon();
@@ -508,8 +513,9 @@ monitor_aat_weapon()
 	for(;;)
 	{
 		self waittill( "weapon_change" );
-        
-    	wait .1;
+
+		self waittill( "weapon_change_complete" );
+
 
 		if(self getCurrentWeapon() == "none")
 		{
@@ -527,7 +533,7 @@ monitor_aat_weapon()
 				self.aat_weapon[i] = undefined;
 			}
 		}
-		wait .1;
+		wait .5;
 		for(i=0;i<3;i++)
 		{
 			if(IsDefined( self.aat_weapon[i] ) && self getCurrentWeapon() == self.aat_weapon[i])
@@ -601,16 +607,17 @@ monitor_aat_weapon()
                 if(self.weapon_aats[i] == 7)
 				{
 					self aat_hud("Thunder Wall", (0,1,1));
-					self.has_fireworks = 0;
+					self.has_fireworks = 1;
 					self.has_blast_furnace = 0;
-					self.has_explosive_bullets = 0;
+					self.has_explosive_bullets = 1;
 					self.has_thunder_wall = 1;
 					self.has_Headcutter = 0;
-					self.has_cluster = 0;
+					self.has_cluster = 1;
 					self.has_turned = 0;
 				}
 			}
 		}
+        wait .5;
         if(isdefined(self.keep_perks) && self.keep_perks)
         {
             //iprintln("keep_perks");
